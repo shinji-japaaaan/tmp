@@ -1,0 +1,439 @@
+#include "push_swap.h"
+
+int main(int argc, char **argv) {
+    if (argc < 2) {
+        return 0;
+    }
+    if (!validate_input(argc, argv)) {
+        display_error();
+        return 1;
+    }
+
+    t_stack *a = init_stack();
+    t_stack *b = init_stack();
+    if (!a || !b) {
+        display_error();
+        return 1;
+    }
+
+    for (int i = 1; i < argc; i++) {
+        push(a, atoi(argv[i]));
+    }
+
+    print_stack(a, "a");
+    print_stack(b, "b");
+    sort_stack(a, b);
+    print_stack(a, "a");
+    print_stack(b, "b");
+    
+    free_stack(a);
+    free_stack(b);
+    return 0;
+}#include "push_swap.h"
+
+// swap a
+void sa(t_stack *a) {
+    if (a->top && a->top->next) {
+        int temp = a->top->value;
+        a->top->value = a->top->next->value;
+        a->top->next->value = temp;
+        write(1, "sa\n", 3);
+    }
+}
+
+// swap b
+void sb(t_stack *b) {
+    if (b->top && b->top->next) {
+        int temp = b->top->value;
+        b->top->value = b->top->next->value;
+        b->top->next->value = temp;
+        write(1, "sb\n", 3);
+    }
+}
+
+// swap both
+void ss(t_stack *a, t_stack *b) {
+    sa(a);
+    sb(b);
+    write(1, "ss\n", 3);
+}
+
+// push a
+void pa(t_stack *a, t_stack *b) {
+    if (!is_empty(b)) {
+        int value = pop(b);
+        push(a, value);
+        write(1, "pa\n", 3);
+    }
+}
+
+// push b
+void pb(t_stack *a, t_stack *b) {
+    if (!is_empty(a)) {
+        int value = pop(a);
+        push(b, value);
+        write(1, "pb\n", 3);
+    }
+}
+
+// rotate a
+void ra(t_stack *a) {
+    if (a->top && a->top->next) {
+        t_node *temp = a->top;
+        a->top = a->top->next;
+        a->top->prev = NULL;
+        temp->next = NULL;
+        a->bottom->next = temp;
+        temp->prev = a->bottom;
+        a->bottom = temp;
+        write(1, "ra\n", 3);
+    }
+}
+
+// rotate b
+void rb(t_stack *b) {
+    if (b->top && b->top->next) {
+        t_node *temp = b->top;
+        b->top = b->top->next;
+        b->top->prev = NULL;
+        temp->next = NULL;
+        b->bottom->next = temp;
+        temp->prev = b->bottom;
+        b->bottom = temp;
+        write(1, "rb\n", 3);
+    }
+}
+
+// rotate both
+void rr(t_stack *a, t_stack *b) {
+    ra(a);
+    rb(b);
+    write(1, "rr\n", 3);
+}
+
+// reverse rotate a
+void rra(t_stack *a) {
+    if (a->top && a->top->next) {
+        t_node *temp = a->bottom;
+        a->bottom = a->bottom->prev;
+        a->bottom->next = NULL;
+        temp->prev = NULL;
+        temp->next = a->top;
+        a->top->prev = temp;
+        a->top = temp;
+        write(1, "rra\n", 4);
+    }
+}
+
+// reverse rotate b
+void rrb(t_stack *b) {
+    if (b->top && b->top->next) {
+        t_node *temp = b->bottom;
+        b->bottom = b->bottom->prev;
+        b->bottom->next = NULL;
+        temp->prev = NULL;
+        temp->next = b->top;
+        b->top->prev = temp;
+        b->top = temp;
+        write(1, "rrb\n", 4);
+    }
+}
+
+// reverse rotate both
+void rrr(t_stack *a, t_stack *b) {
+    rra(a);
+    rrb(b);
+    write(1, "rrr\n", 4);
+}
+#include "push_swap.h"
+
+// 3個以下の要素をソート
+void sort_three_or_less(t_stack *a) {
+    if (a->size == 2 && a->top->value > a->top->next->value) {
+        sa(a);
+    } else if (a->size == 3) {
+        int top = a->top->value;
+        int middle = a->top->next->value;
+        int bottom = a->top->next->next->value;
+        if (top > middle && middle < bottom && top < bottom) {
+            sa(a);
+        } else if (top > middle && middle > bottom && top > bottom) {
+            sa(a);
+            rra(a);
+        } else if (top > middle && middle < bottom && top > bottom) {
+            ra(a);
+        } else if (top < middle && middle > bottom && top < bottom) {
+            sa(a);
+            ra(a);
+        } else if (top < middle && middle > bottom && top > bottom) {
+            rra(a);
+        }
+    }
+}
+
+// 6個以下の要素をソート
+void sort_six_or_less(t_stack *a, t_stack *b) {
+    // aが3個になるまで小さい数からbにpush
+    while (a->size > 3) {
+        int min_index = 0;
+        t_node *current = a->top;
+        t_node *min_node = a->top;
+        for (int i = 0; i < a->size; i++) {
+            if (current->value < min_node->value) {
+                min_node = current;
+                min_index = i;
+            }
+            current = current->next;
+        }
+        if (min_index <= a->size / 2) {
+            for (int i = 0; i < min_index; i++) {
+                ra(a);
+            }
+        } else {
+            for (int i = 0; i < a->size - min_index; i++) {
+                rra(a);
+            }
+        }
+        pb(a, b);
+    }
+    // 残った3個の要素をソート
+    sort_three_or_less(a);    
+
+    // bからaに要素をpushし直す
+    while (b->size > 0) {
+        pa(a, b);
+    }
+}
+
+
+// クイックソートを応用して7個以上の要素をソート
+void sort_seven_or_more(t_stack *a, t_stack *b) {
+    // クイックソートのアルゴリズムを適用
+    (void)b;
+    (void)a;
+}
+
+// メインのソート関数
+void sort_stack(t_stack *a, t_stack *b) {
+    if (a->size <= 3) {
+        sort_three_or_less(a);
+    } else if (a->size <= 6) {
+        sort_six_or_less(a, b);
+    } else {
+        sort_seven_or_more(a, b);
+    }
+}
+#include "push_swap.h"
+
+// スタックの初期化
+t_stack *init_stack() {
+    t_stack *stack = (t_stack *)malloc(sizeof(t_stack));
+    if (!stack)
+        return NULL;
+    stack->top = NULL;
+    stack->bottom = NULL;
+    stack->size = 0;
+    return stack;
+}
+
+// スタックが空かどうかを確認
+int is_empty(t_stack *stack) {
+    return stack->size == 0;
+}
+
+// 新しいノードを作成
+t_node *new_node(int value) {
+    t_node *node = (t_node *)malloc(sizeof(t_node));
+    if (!node)
+        return NULL;
+    node->value = value;
+    node->next = NULL;
+    node->prev = NULL;
+    return node;
+}
+
+// スタックにプッシュ
+void push(t_stack *stack, int value) {
+    t_node *node = new_node(value);
+    if (!node)
+        return;
+    if (is_empty(stack)) {
+        stack->top = node;
+        stack->bottom = node;
+    } else {
+        node->next = stack->top;
+        stack->top->prev = node;
+        stack->top = node;
+    }
+    stack->size++;
+}
+
+// スタックからポップ
+int pop(t_stack *stack) {
+    if (is_empty(stack))
+        return 0;
+    t_node *temp = stack->top;
+    int value = temp->value;
+    stack->top = temp->next;
+    if (stack->top)
+        stack->top->prev = NULL;
+    else
+        stack->bottom = NULL;
+    free(temp);
+    stack->size--;
+    return value;
+}
+
+// スタックを解放する関数
+void free_stack(t_stack *stack) {
+    t_node *current = stack->top;
+    t_node *next;
+    while (current) {
+        next = current->next;
+        free(current);
+        current = next;
+    }
+    free(stack);
+}
+
+// スタックの内容を出力する関数
+void print_stack(t_stack *stack, const char *stack_name) {
+    printf("Stack %s: ", stack_name);
+    t_node *current = stack->top;
+    while (current) {
+        printf("%d ", current->value);
+        current = current->next;
+    }
+    printf("\n");
+}
+
+int validate_input(int argc, char **argv) {
+    for (int i = 1; i < argc; i++) {
+        for (int j = 0; argv[i][j]; j++) {
+            if (!((argv[i][j] >= '0' && argv[i][j] <= '9') || argv[i][j] == '-' || argv[i][j] == '+')) {
+                return 0;
+            }
+        }
+        long value = atol(argv[i]);
+        if (value > INT_MAX || value < INT_MIN) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+// エラーメッセージを表示する関数
+void display_error() {
+    write(2, "Error\n", 6);
+}#ifndef PUSH_SWAP_H
+#define PUSH_SWAP_H
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <limits.h>
+
+// ノードの構造体
+typedef struct s_node {
+    int value;
+    struct s_node *prev;
+    struct s_node *next;
+} t_node;
+
+// スタックの構造体
+typedef struct s_stack {
+    t_node *top;
+    t_node *bottom;
+    int size;
+} t_stack;
+
+// スタックの初期化
+t_stack *init_stack();
+
+// スタックが空かどうかを確認
+int is_empty(t_stack *stack);
+
+// 新しいノードを作成
+t_node *new_node(int value);
+
+// スタックにプッシュ
+void push(t_stack *stack, int value);
+
+// スタックからポップ
+int pop(t_stack *stack);
+
+// 操作関数のプロトタイプ
+void sa(t_stack *a);
+void sb(t_stack *b);
+void ss(t_stack *a, t_stack *b);
+void pa(t_stack *a, t_stack *b);
+void pb(t_stack *a, t_stack *b);
+void ra(t_stack *a);
+void rb(t_stack *b);
+void rr(t_stack *a, t_stack *b);
+void rra(t_stack *a);
+void rrb(t_stack *b);
+void rrr(t_stack *a, t_stack *b);
+
+// スタックの内容を出力する関数のプロトタイプ
+void print_stack(t_stack *stack, const char *stack_name);
+
+// スタックを解放する関数のプロトタイプ
+void free_stack(t_stack *stack);
+
+// ソートアルゴリズムのプロトタイプ
+void sort_stack(t_stack *a, t_stack *b);
+
+// 要素数3個以下のソート関数
+void sort_three_or_less(t_stack *a);
+
+// 要素数6個以下のソート関数
+void sort_six_or_less(t_stack *a, t_stack *b);
+
+// 要素数7個以上のソート関数
+void sort_seven_or_more(t_stack *a, t_stack *b);
+
+// 入力のバリデーション関数のプロトタイプ
+int validate_input(int argc, char **argv);
+
+// エラーメッセージを表示する関数
+void display_error();
+
+#endif
+# コンパイラとフラグの定義
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
+
+# ターゲット名
+NAME = push_swap
+
+# ソースファイルとオブジェクトファイルの定義
+SRCS = main.c operations.c utils.c sort.c
+OBJS = $(SRCS:.c=.o)
+
+# 依存関係の生成
+DEPS = push_swap.h
+
+# デフォルトのターゲット
+all: $(NAME)
+
+# ターゲットのリンク
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+
+# オブジェクトファイルの生成
+%.o: %.c $(DEPS)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# クリーンアップターゲット
+clean:
+	rm -f $(OBJS)
+
+fclean: clean
+	rm -f $(NAME)
+
+# リビルドターゲット
+re: fclean all
+
+# .PHONYターゲットの定義
+.PHONY: all clean fclean re
