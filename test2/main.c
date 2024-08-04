@@ -19,9 +19,12 @@ int main(int argc, char **argv) {
     for (int i = 1; i < argc; i++) {
         push(a, atoi(argv[i]));
     }
+    // printf("%d", a->top->value);
+    // printf("%d", a->top->next->value);
+    printf("%d", a->top->prev->value);
 
-    print_stack(a, "a");
-    print_stack(b, "b");
+    // print_stack(a, "a");
+    // print_stack(b, "b");
     sort_stack(a, b);
     print_stack(a, "a");
     print_stack(b, "b");
