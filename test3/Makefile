@@ -1,14 +1,14 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: root <root@student.42.fr>                  +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/07/23 13:48:18 by yogun             #+#    #+#              #
-#    Updated: 2024/08/04 13:48:37 by root             ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+# ************************************************************************************ #
+#                                                                                      #
+#                                                                 :::      ::::::::    #
+#    Makefile                                                   :+:      :+:    :+:    #
+#                                                             +:+ +:+         +:+      #
+#    By: sishizaw <sishizaw@student.42.fr>                  +#+  +:+       +#+         #
+#                                                         +#+#+#+#+#+   +#+            #
+#    Created: 2024/08/10 12:31:50 by sishizaw                  #+#    #+#              #
+#    Updated: 2024/08/10 12:32:37 by sishizaw                 ###   ########.fr        #
+#                                                                                      #
+# ************************************************************************************ #
 
 NAME = push_swap
 CC = gcc
@@ -20,24 +20,20 @@ SRC_DIR = srcs/
 
 SRC_1 = srcs/main.c \
 
-SRC_2 =	srcs/algorithm.c \
-		srcs/add_back.c \
-		srcs/stack_new.c \
-		srcs/solver_utils_ab.c \
-		srcs/solver_utils_ba.c \
-		srcs/rotate_and_push.c \
-		srcs/operations.c \
+SRC_2 =	srcs/sort.c \
+		srcs/operations_1.c \
 		srcs/operations_2.c \
 		srcs/operations_3.c \
-		srcs/check_dup.c \
-		srcs/check_sorted.c \
-		srcs/error_print.c \
-		srcs/free.c \
-		srcs/lst_utils.c \
-		srcs/lst_utils_2.c \
-		srcs/rotate_type.c \
-		srcs/sort_three.c \
-		srcs/sort_big.c \
+		srcs/utils_apply.c \
+		srcs/utils_case_ab.c \
+		srcs/utils_case_ba.c \
+		srcs/utils_check.c \
+		srcs/utils_find.c \
+		srcs/utils_input.c \
+		srcs/utils_libft1.c \
+		srcs/utils_libft2.c \
+		srcs/utils_other.c \
+		srcs/utils_get_costinfo.c \
 
 OBJ_1 = ${SRC_1:.c=.o}
 OBJ_2 = ${SRC_2:.c=.o}

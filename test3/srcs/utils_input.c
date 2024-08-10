@@ -1,7 +1,7 @@
 /* ********************************************************************************** */
 /*                                                                                    */
 /*                                                                :::      ::::::::   */
-/*   operations_3.c                                             :+:      :+:    :+:   */
+/*   utils_input.c                                              :+:      :+:    :+:   */
 /*                                                            +:+ +:+         +:+     */
 /*   By: sishizaw <sishizaw@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                        +#+#+#+#+#+   +#+           */
@@ -12,29 +12,63 @@
 
 #include "../push_swap.h"
 
-void	rb(t_stack **b)
+void	all_free2(char **lst)
 {
-	t_stack	*tmp;
+	char	**tmp;
+	char	*n1;
 
-	if (!*b || !(*b)->next)
+	tmp = lst;
+	if (!lst)
 		return ;
-	tmp = *b;
-	*b = ft_lstlast(*b);
-	(*b)->next = tmp;
-	*b = tmp->next;
-	tmp->next = NULL;
-	write(1, "rb\n", 3);
+	while (*lst)
+	{
+		n1 = *lst;
+		lst++;
+		free(n1);
+	}
+	free(tmp);
 }
 
-void	ft_sb(t_stack **b)
+t_stack	*argc_2(char **argv)
 {
-	t_stack	*tmp;
+	t_stack	*a;
+	char	**tmp;
+	int		i;
+	int		j;
 
-	if (!*b || !((*b)->next))
-		return ;
-	tmp = *b;
-	*b = (*b)->next;
-	tmp->next = (*b)->next;
-	(*b)->next = tmp;
-	write(1, "sb\n", 3);
+	a = NULL;
+	i = 0;
+	tmp = ft_split(argv[1], ' ');
+	while (tmp[i])
+	{
+		j = ft_atoi2(tmp[i]);
+		ft_add_back(&a, ft_stack_new(j));
+		i++;
+	}
+	all_free2(tmp);
+	return (a);
+}
+
+t_stack	*input(int argc, char **argv)
+{
+	t_stack	*a;
+	int		i;
+	int		j;
+
+	i = 1;
+	a = NULL;
+	if (argc < 2)
+		display_error();
+	if (argc == 2)
+		a = argc_2(argv);
+	else
+	{
+		while (i < argc)
+		{
+			j = ft_atoi2(argv[i]);
+			ft_add_back(&a, ft_stack_new(j));
+			i++;
+		}
+	}
+	return (a);
 }

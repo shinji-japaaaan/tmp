@@ -1,7 +1,7 @@
 /* ********************************************************************************** */
 /*                                                                                    */
 /*                                                                :::      ::::::::   */
-/*   operations_2.c                                             :+:      :+:    :+:   */
+/*   operations_1.c                                             :+:      :+:    :+:   */
 /*                                                            +:+ +:+         +:+     */
 /*   By: sishizaw <sishizaw@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                        +#+#+#+#+#+   +#+           */
@@ -12,60 +12,59 @@
 
 #include "../push_swap.h"
 
-void	rr(t_stack **a, t_stack **b)
+void	ra(t_stack **a)
 {
 	t_stack	*tmp;
 
-	if (!*a || !((*a)->next) || !*b || !((*b)->next))
+	if (!*a || !(*a)->next)
 		return ;
 	tmp = *a;
 	*a = ft_lstlast(*a);
 	(*a)->next = tmp;
 	*a = tmp->next;
 	tmp->next = NULL;
-	tmp = *b;
-	*b = ft_lstlast(*b);
-	(*b)->next = tmp;
-	*b = tmp->next;
-	tmp->next = NULL;
-	write(1, "rr\n", 3);
+	write(1, "ra\n", 3);
 }
 
-void	rrr_sub(t_stack **b)
+void	sa(t_stack **a)
+{
+	t_stack	*tmp;
+
+	if (!*a || !((*a)->next))
+		return ;
+	tmp = *a;
+	*a = (*a)->next;
+	tmp->next = (*a)->next;
+	(*a)->next = tmp;
+	write(1, "sa\n", 3);
+}
+
+void	pa(t_stack **a, t_stack **b)
+{
+	t_stack	*tmp;
+
+	if (!*b)
+		return ;
+	tmp = *a;
+	*a = *b;
+	*b = (*b)->next;
+	(*a)->next = tmp;
+	write(1, "pa\n", 3);
+}
+
+void	rra(t_stack **a)
 {
 	t_stack	*tmp;
 	int		i;
 
-	i = 0;
-	tmp = *b;
-	while ((*b)->next)
-	{
-		i++;
-		*b = (*b)->next;
-	}
-	(*b)->next = tmp;
-	while (i > 1)
-	{
-		tmp = tmp->next;
-		i--;
-	}
-	tmp->next = NULL;
-	write(1, "rrr\n", 4);
-}
-
-void	rrr(t_stack **a, t_stack **b)
-{
-	t_stack	*tmp;
-	int		i;
-
-	if (!*a || !((*a)->next) || !*b || !((*b)->next))
+	if (!*a || !(*a)->next)
 		return ;
 	i = 0;
 	tmp = *a;
 	while ((*a)->next)
 	{
-		i++;
 		*a = (*a)->next;
+		i++;
 	}
 	(*a)->next = tmp;
 	while (i > 1)
@@ -74,42 +73,22 @@ void	rrr(t_stack **a, t_stack **b)
 		i--;
 	}
 	tmp->next = NULL;
-	rrr_sub(b);
+	write(1, "rra\n", 4);
 }
 
-void	pb(t_stack **stack_a, t_stack **stack_b)
+void	ss(t_stack **a, t_stack **b)
 {
 	t_stack	*tmp;
 
-	if (!*stack_a)
+	if (!*a || !((*a)->next) || !*b || !((*b)->next))
 		return ;
-	tmp = *stack_b;
-	*stack_b = *stack_a;
-	*stack_a = (*stack_a)->next;
-	(*stack_b)->next = tmp;
-	write(1, "pb\n", 3);
-}
-
-void	rrb(t_stack **b)
-{
-	t_stack	*tmp;
-	int		i;
-
-	if (!*b || !(*b)->next)
-		return ;
-	i = 0;
+	tmp = *a;
+	*a = (*a)->next;
+	tmp->next = (*a)->next;
+	(*a)->next = tmp;
 	tmp = *b;
-	while ((*b)->next)
-	{
-		i++;
-		*b = (*b)->next;
-	}
+	*b = (*b)->next;
+	tmp->next = (*b)->next;
 	(*b)->next = tmp;
-	while (i > 1)
-	{
-		tmp = tmp->next;
-		i--;
-	}
-	tmp->next = NULL;
-	write(1, "rrb\n", 4);
+	write(1, "ss\n", 3);
 }

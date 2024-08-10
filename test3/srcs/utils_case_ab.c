@@ -1,7 +1,7 @@
 /* ********************************************************************************** */
 /*                                                                                    */
 /*                                                                :::      ::::::::   */
-/*   operations_3.c                                             :+:      :+:    :+:   */
+/*   utils_case_ab.c                                            :+:      :+:    :+:   */
 /*                                                            +:+ +:+         +:+     */
 /*   By: sishizaw <sishizaw@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                        +#+#+#+#+#+   +#+           */
@@ -12,29 +12,46 @@
 
 #include "../push_swap.h"
 
-void	rb(t_stack **b)
+int	case_rarb(t_stack *a, t_stack *b, int c)
 {
-	t_stack	*tmp;
+	int	i;
 
-	if (!*b || !(*b)->next)
-		return ;
-	tmp = *b;
-	*b = ft_lstlast(*b);
-	(*b)->next = tmp;
-	*b = tmp->next;
-	tmp->next = NULL;
-	write(1, "rb\n", 3);
+	i = find_place_b(b, c);
+	if (i < find_index(a, c))
+		i = find_index(a, c);
+	return (i);
 }
 
-void	ft_sb(t_stack **b)
+int	case_rrarrb(t_stack *a, t_stack *b, int c)
 {
-	t_stack	*tmp;
+	int	i;
 
-	if (!*b || !((*b)->next))
-		return ;
-	tmp = *b;
-	*b = (*b)->next;
-	tmp->next = (*b)->next;
-	(*b)->next = tmp;
-	write(1, "sb\n", 3);
+	i = 0;
+	if (find_place_b(b, c))
+		i = ft_lstsize(b) - find_place_b(b, c);
+	if ((i < (ft_lstsize(a) - find_index(a, c))) && find_index(a, c))
+		i = ft_lstsize(a) - find_index(a, c);
+	return (i);
+}
+
+int	case_rrarb(t_stack *a, t_stack *b, int c)
+{
+	int	i;
+
+	i = 0;
+	if (find_index(a, c))
+		i = ft_lstsize(a) - find_index(a, c);
+	i = find_place_b(b, c) + i;
+	return (i);
+}
+
+int	case_rarrb(t_stack *a, t_stack *b, int c)
+{
+	int	i;
+
+	i = 0;
+	if (find_place_b(b, c))
+		i = ft_lstsize(b) - find_place_b(b, c);
+	i = find_index(a, c) + i;
+	return (i);
 }

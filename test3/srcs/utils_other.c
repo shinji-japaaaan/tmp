@@ -1,7 +1,7 @@
 /* ********************************************************************************** */
 /*                                                                                    */
 /*                                                                :::      ::::::::   */
-/*   operations_3.c                                             :+:      :+:    :+:   */
+/*   utils_other.c                                              :+:      :+:    :+:   */
 /*                                                            +:+ +:+         +:+     */
 /*   By: sishizaw <sishizaw@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                        +#+#+#+#+#+   +#+           */
@@ -12,29 +12,35 @@
 
 #include "../push_swap.h"
 
-void	rb(t_stack **b)
+void ft_print_stack(t_stack *stack, const char *stack_name)
 {
-	t_stack	*tmp;
-
-	if (!*b || !(*b)->next)
-		return ;
-	tmp = *b;
-	*b = ft_lstlast(*b);
-	(*b)->next = tmp;
-	*b = tmp->next;
-	tmp->next = NULL;
-	write(1, "rb\n", 3);
+    t_stack *current = stack;
+    
+    printf("%s:\n", stack_name);
+    while (current)
+    {
+        printf("%ld ", current->nbr);
+        current = current->next;
+    }
+    printf("\n");
 }
 
-void	ft_sb(t_stack **b)
+void display_error(void) {
+    write(2, "Error\n", 6);
+	exit(1);
+}
+
+void	ft_free(t_stack **lst)
 {
 	t_stack	*tmp;
 
-	if (!*b || !((*b)->next))
+	if (!lst)
 		return ;
-	tmp = *b;
-	*b = (*b)->next;
-	tmp->next = (*b)->next;
-	(*b)->next = tmp;
-	write(1, "sb\n", 3);
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		(*lst)->nbr = 0;
+		free(*lst);
+		*lst = tmp;
+	}
 }

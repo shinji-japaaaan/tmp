@@ -1,7 +1,7 @@
 /* ********************************************************************************** */
 /*                                                                                    */
 /*                                                                :::      ::::::::   */
-/*   operations_3.c                                             :+:      :+:    :+:   */
+/*   utils_check.c                                              :+:      :+:    :+:   */
 /*                                                            +:+ +:+         +:+     */
 /*   By: sishizaw <sishizaw@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                        +#+#+#+#+#+   +#+           */
@@ -12,29 +12,35 @@
 
 #include "../push_swap.h"
 
-void	rb(t_stack **b)
+int	checkup(t_stack *a)
 {
 	t_stack	*tmp;
 
-	if (!*b || !(*b)->next)
-		return ;
-	tmp = *b;
-	*b = ft_lstlast(*b);
-	(*b)->next = tmp;
-	*b = tmp->next;
-	tmp->next = NULL;
-	write(1, "rb\n", 3);
+	while (a)
+	{
+		tmp = a->next;
+		while (tmp)
+		{
+			if (a->nbr == tmp->nbr)
+				return (0);
+			tmp = tmp->next;
+		}
+		a = a->next;
+	}
+	return (1);
 }
 
-void	ft_sb(t_stack **b)
+int	check_sorted(t_stack *stack_a)
 {
-	t_stack	*tmp;
+	int	i;
 
-	if (!*b || !((*b)->next))
-		return ;
-	tmp = *b;
-	*b = (*b)->next;
-	tmp->next = (*b)->next;
-	(*b)->next = tmp;
-	write(1, "sb\n", 3);
+	i = stack_a->nbr;
+	while (stack_a)
+	{
+		if (i > stack_a->nbr)
+			return (0);
+		i = stack_a->nbr;
+		stack_a = stack_a->next;
+	}
+	return (1);
 }

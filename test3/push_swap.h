@@ -1,14 +1,14 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/04 10:58:28 by root              #+#    #+#             */
-/*   Updated: 2024/08/04 11:02:09 by root             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+/* ********************************************************************************** */
+/*                                                                                    */
+/*                                                                :::      ::::::::   */
+/*   push_swap.h                                                :+:      :+:    :+:   */
+/*                                                            +:+ +:+         +:+     */
+/*   By: sishizaw <sishizaw@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                        +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/04 10:58:28 by sishizaw                  #+#    #+#             */
+/*   Updated: 2024/08/10 11:28:03 by sishizaw                 ###   ########.fr       */
+/*                                                                                    */
+/* ********************************************************************************** */
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
@@ -25,14 +25,13 @@ typedef struct s_stack
 	long			nbr;
 	long			index;
 	struct s_stack	*next;
-	struct s_stack	*prev;
 }	t_stack;
 
-typedef struct s_rotate_info {
+typedef struct s_cost_info {
     int cost;
     int nbr;
     int operation;
-} t_rotate_info;
+} t_cost_info;
 
 void ft_print_stack(t_stack *stack, const char *stack_name);
 
@@ -42,21 +41,21 @@ int			checkup(t_stack *a);
 void 		display_error(void);
 void		ft_free(t_stack **lst);
 t_stack		*ft_lstlast(t_stack *lst);
-void		ra(t_stack **a, int j);
-void		rb(t_stack **b, int j);
-void		sa(t_stack **a, int j);
-void		pa(t_stack **a, t_stack **b, int j);
-void		pb(t_stack **stack_a, t_stack **stack_b, int j);
-void		rra(t_stack **a, int j);
-void		ss(t_stack **a, t_stack **b, int j);
-void		rr(t_stack **a, t_stack **b, int j);
-void		rrr_sub(t_stack **b, int j);
-void		rrr(t_stack **a, t_stack **b, int j);
+void		ra(t_stack **a);
+void		rb(t_stack **b);
+void		sa(t_stack **a);
+void		pa(t_stack **a, t_stack **b);
+void		pb(t_stack **stack_a, t_stack **stack_b);
+void		rra(t_stack **a);
+void		ss(t_stack **a, t_stack **b);
+void		rr(t_stack **a, t_stack **b);
+void		rrr_sub(t_stack **b);
+void		rrr(t_stack **a, t_stack **b);
 t_stack		*ft_lstlast(t_stack *lst);
 int			ft_lstsize(t_stack *lst);
 int			find_min(t_stack *a);
 int			find_max(t_stack *a);
-int			find_index(t_stack *a, int nbr);
+int			find_index(t_stack *a, int c);
 int			find_place_b(t_stack *stack_b, int nbr_push);
 int			find_place_a(t_stack *a, int nbr);
 void		sort_stack(t_stack **stack_a);
@@ -71,15 +70,15 @@ int			case_rarb(t_stack *a, t_stack *b, int c);
 int			case_rrarrb(t_stack *a, t_stack *b, int c);
 int			case_rrarb(t_stack *a, t_stack *b, int c);
 int			case_rarrb(t_stack *a, t_stack *b, int c);
-t_rotate_info get_rotateinfo_ab(t_stack *a, t_stack *b);
-t_rotate_info get_rotateinfo_ba(t_stack *a, t_stack *b);
+t_cost_info get_costinfo_ab(t_stack *a, t_stack *b);
+t_cost_info get_costinfo_ba(t_stack *a, t_stack *b);
 int			apply_rarb(t_stack **a, t_stack **b, int c, char s);
 int			apply_rrarrb(t_stack **a, t_stack **b, int c, char s);
 int			apply_rrarb(t_stack **a, t_stack **b, int c, char s);
 int			apply_rarrb(t_stack **a, t_stack **b, int c, char s);
-void		rrb(t_stack **b, int j);
+void		rrb(t_stack **b);
 t_stack		*input(int argc, char **argv);
 void		sort_till_3(t_stack **stack_a, t_stack **stack_b);
-t_stack		*ft_sub_process(char **argv);
+int	ft_atoi2(const char *str);
 
 #endif
