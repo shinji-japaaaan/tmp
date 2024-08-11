@@ -1,14 +1,14 @@
-/* ********************************************************************************** */
-/*                                                                                    */
-/*                                                                :::      ::::::::   */
-/*   utils_libft2.c                                             :+:      :+:    :+:   */
-/*                                                            +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                        +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/04 10:20:17 by sishizaw                  #+#    #+#             */
-/*   Updated: 2024/08/08 08:10:08 by sishizaw                 ###   ########.fr       */
-/*                                                                                    */
-/* ********************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_libft2.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/11 11:10:33 by sishizaw          #+#    #+#             */
+/*   Updated: 2024/08/11 11:19:21 by sishizaw         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../push_swap.h"
 
@@ -41,8 +41,7 @@ int	ft_atoi2(const char *str)
 
 	i = 0;
 	sign = 1;
-	while (*str == ' ' || *str == '\t' || *str == '\n' || *str == '\f'
-		|| *str == '\v' || *str == '\r')
+	while (*str == ' ' || ('\t' <= *str && *str <= '\r'))
 		str++;
 	if (*str == '-')
 	{
@@ -51,16 +50,11 @@ int	ft_atoi2(const char *str)
 	}
 	else if (*str == '+')
 		str++;
-	while (*str)
-	{
-		if (!ft_isdigit(*str))
-			display_error();
-		i = i * 10 + (*str - 48);
-		str++;
-	}
-	if ((sign * i) > 2147483647 || (sign * i) < -2147483648)
+	if (!ft_isdigit(*str))
 		display_error();
-	if (sign * i == 0)
+	while (*str && ft_isdigit(*str))
+		i = i * 10 + (*str++ - 48);
+	if (*str || (sign * i) > 2147483647 || (sign * i) < -2147483648)
 		display_error();
 	return (sign * i);
 }

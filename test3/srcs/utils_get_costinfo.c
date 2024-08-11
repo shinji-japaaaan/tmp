@@ -1,30 +1,32 @@
-/* ********************************************************************************** */
-/*                                                                                    */
-/*                                                                :::      ::::::::   */
-/*   utils_get_costinfo.c                                       :+:      :+:    :+:   */
-/*                                                            +:+ +:+         +:+     */
-/*   By: sishizaw <sishizaw@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                        +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/04 10:20:17 by sishizaw                  #+#    #+#             */
-/*   Updated: 2024/08/08 08:10:08 by sishizaw                 ###   ########.fr       */
-/*                                                                                    */
-/* ********************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_get_costinfo.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sishizaw <sishizaw@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/11 11:10:08 by sishizaw          #+#    #+#             */
+/*   Updated: 2024/08/11 11:25:07 by sishizaw         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../push_swap.h"
 
 int get_costinfo2_ba(t_stack *a, t_stack *b, int nbr, int *operation)
 {
     int costs[4];
+    int min_cost;
+    int i;
 
     costs[0] = case_rarb_ba(a, b, nbr);
     costs[1] = case_rrarrb_ba(a, b, nbr);
     costs[2] = case_rarrb_ba(a, b, nbr);
     costs[3] = case_rrarb_ba(a, b, nbr);
 
-    int min_cost = costs[0];
+    min_cost = costs[0];
     *operation = 0;
 
-  int i = 1; // ループ変数の初期化
+    i = 1;
     while (i < 4)
     {
         if (costs[i] < min_cost)
@@ -32,7 +34,7 @@ int get_costinfo2_ba(t_stack *a, t_stack *b, int nbr, int *operation)
             min_cost = costs[i];
             *operation = i;
         }
-        i++; // ループ変数の更新
+        i++;
     }
     return min_cost;
 }
